@@ -1,0 +1,177 @@
+<!DOCTYPE HTML>
+<html>
+<head>
+  <title>Google台灣每日關鍵字熱搜 | Marketing-Taiwan 行銷台灣</title>
+  <meta charset="UTF-8">
+  <script src="dist/vis.js"></script>
+  <link href="dist/vis.css" rel="stylesheet" type="text/css" />
+  <link rel="stylesheet" href="http://maxcdn.bootstrapcdn.com/bootstrap/3.3.5/css/bootstrap.min.css">
+  <script src="http://cdnjs.cloudflare.com/ajax/libs/jquery/2.1.1/jquery.min.js"></script>
+  <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.11.3/jquery.min.js"></script>
+  <script src="http://maxcdn.bootstrapcdn.com/bootstrap/3.3.5/js/bootstrap.min.js"></script>
+  <script src="js/ga.js"></script>
+    <link rel="shortcut icon" href="images/marketing-taiwan.ico" />
+    <style type="text/css">
+  body {
+    font-family: 'Lato', sans-serif;
+  }
+
+  .vis-timeline {
+    border: 5px solid #FFF;
+    font-family:  'Lato', sans-serif;
+    font-size: 10pt;
+    background: #FFF;
+  }
+
+  .vis-item {
+    border-color: #38d4d6;
+    background-color: #c8eef2;
+    font-size: 9pt;
+    color: #797979;
+    box-shadow: 5px 5px 10px rgba(128,128,128, 0.1);
+  }
+
+  .vis-item,
+  .vis-item.vis-line {
+    border-width: 2px;
+  }
+
+  .vis-item.vis-dot {
+    border-width: 5px;
+    border-radius: 5px;
+  }
+
+  .vis-item.vis-selected {
+    border-color: green;
+    background-color: lightgreen;
+  }
+
+  .vis-time-axis .vis-text {
+    color: #d1cbc6;
+    padding-top: 2px;
+    padding-left: 2px;
+  }
+
+  .vis-time-axis .vis-text.vis-major {
+    font-weight: bold;
+  }
+
+  .vis-time-axis .vis-grid.vis-minor {
+    border-width: 1px;
+    border-color: pink;
+  }
+
+  .vis-time-axis .vis-grid.vis-major {
+    border-width: 2px;
+    border-color: #d1cbc6;
+  }
+
+  .vis-inner{
+      font-size: 12pt;
+      font-family:  purisa, 'comic sans', cursive;
+  }
+
+  body a{
+  color: #797979;
+  padding: 0.23em 0.5em;
+  font-size: 1em;
+  text-align: center;
+  position: relative;
+  font-family: 'Lato', sans-serif;
+  }
+
+  body a:active,
+  body a:hover{
+    color:#38d4d6;
+  }
+  </style>
+</head>
+<body>
+  <!-- Google Tag Manager -->
+  <noscript><iframe src="//www.googletagmanager.com/ns.html?id=GTM-WKDCJN"
+    height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript>
+    <script>(function(w,d,s,l,i){w[l]=w[l]||[];w[l].push({'gtm.start':
+      new Date().getTime(),event:'gtm.js'});var f=d.getElementsByTagName(s)[0],
+    j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src=
+    '//www.googletagmanager.com/gtm.js?id='+i+dl;f.parentNode.insertBefore(j,f);
+  })(window,document,'script','dataLayer','GTM-WKDCJN');</script>
+  <!-- End Google Tag Manager -->
+
+  <h2 style="font-family:Catull"><center>台灣人每天關心啥米哩？－<span style="color:#0140CA;">G</span><span style="color:#DD1812">o</span><span style="color:#FCCA03">o</span><span style="color:#0140CA">g</span><span style="color:#16A61E">l</span><span style="color:#DD1812">e</span></div>台灣每日關鍵字熱搜</center></h2>
+
+  <h4><center>那麼<a href="/GoogleTrendsUSA.html" target="_blank">美國</a>|<a href="/GoogleTrendsIndia.html" target="_blank">印度</a>呢?</center></h4>
+
+  <center><p>By <a href="http://marketing-taiwan.com/">Marketing-Taiwan</a></p></center>
+
+  <div id="visualization"></div>
+  <div id="loading"> 載入中... 稍等一下捏...</div>
+
+  <script type="text/javascript">
+
+  $.ajax({
+    url: 'data/Taiwan2015test.json',
+    success: function (data) {
+// hide the "loading..." message
+document.getElementById('loading').style.display = 'none';
+
+
+// DOM element where the Timeline will be attached
+var container = document.getElementById('visualization');
+
+var groups = new vis.DataSet([
+  {id: 0, content: '100,000+ 搜尋', value: 1},
+  {id: 1, content: '10,000+ 搜尋', value: 2},
+  {id: 2, content: '1,000+ 搜尋', value: 3}
+  ]);
+
+// Create a DataSet (allows two way data-binding)
+var items = new vis.DataSet(data);
+
+
+// Configuration for the Timeline
+var options = {
+  groupOrder: function (a, b) {
+    return a.value - b.value;
+  },
+  min: new Date(2014, 12, 1),                // lower limit of visible range
+  max: new Date(2015, 8, 27),                // upper limit of visible range
+  zoomMin: 1000 * 60 * 60 * 24 * 2,             // one day in milliseconds
+  zoomMax: 1000 * 60 * 60 * 24 * 31 * 12     // about three months in milliseconds
+};
+
+var timeline = new vis.Timeline(container, items, options);
+timeline.setOptions(options);
+timeline.setGroups(groups);
+timeline.setItems(items);
+
+
+$(document).ready(function(){
+  $('[data-toggle="tooltip"]').tooltip();   
+});
+
+$(".more_info").click(function () {
+  var $title = $(this).find(".title");
+  if (!$title.length) {
+    $(this).append('<span class="title">' + $(this).attr("title") + '</span>');
+  } else {
+    $title.remove();
+  }
+});
+
+},
+
+
+error: function (err) {
+  console.log('Error', err);
+  if (err.status === 0) {
+    alert('嗚嗚⋯⋯ 請重新整理頁面，或是等等再回來。');
+  }
+  else {
+    alert('嗚嗚⋯⋯ 請重新整理頁面，或是等等再回來。');
+  }
+}
+});
+
+</script>
+</body>
+</html>
